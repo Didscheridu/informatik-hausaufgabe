@@ -3,74 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entdecke Seoul</title>
+    <title>Seoul Reiseführer Ultimate</title>
     
     <style>
-        /* --- DESIGN & CSS (Das Styling) --- */
+        /* --- CSS DESIGN --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f9;
+            background-color: #f0f2f5;
             margin: 0;
             padding: 0;
             color: #333;
         }
 
-        /* Header Bereich mit Farbverlauf */
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            padding: 40px 20px;
+            padding: 60px 20px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            animation: fadeIn 1.5s ease-in;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
         }
 
-        h1 {
-            margin: 0;
-            font-size: 2.5em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+        h1 { margin: 0; font-size: 3em; letter-spacing: 1px; }
+        p.subtitle { font-size: 1.3em; opacity: 0.9; margin-top: 10px; }
 
-        p.subtitle {
-            font-size: 1.2em;
-            margin-top: 10px;
-            opacity: 0.9;
-        }
-
-        /* Container für den Inhalt */
+        /* Container für das Grid */
         .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
         }
 
-        /* Die Karten (Cards) */
+        /* Die Karte */
         .card {
             background: white;
-            border-radius: 12px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            opacity: 0; /* Startet unsichtbar für Animation */
-            animation: slideUp 0.8s forwards;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer; /* Zeigt die Hand beim Drüberfahren */
+            position: relative;
         }
 
-        /* Verzögerung der Animation für jede Karte */
-        .card:nth-child(1) { animation-delay: 0.2s; }
-        .card:nth-child(2) { animation-delay: 0.4s; }
-        .card:nth-child(3) { animation-delay: 0.6s; }
-
-        /* Hover Effekt: Karte hebt sich */
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
         }
 
-        /* Bilder in den Karten */
         .card-image {
             height: 200px;
             overflow: hidden;
@@ -83,86 +65,219 @@
             transition: transform 0.5s ease;
         }
 
-        /* Hover Effekt: Bild zoomt */
-        .card:hover .card-image img {
-            transform: scale(1.1);
+        .card:hover .card-image img { transform: scale(1.1); }
+
+        .card-content { padding: 20px; }
+        .card-content h3 { margin: 0 0 10px 0; color: #1e3c72; }
+        .card-content p { font-size: 0.9em; color: #666; }
+
+        /* Kleiner Hinweis-Button in der Karte */
+        .info-badge {
+            background-color: #e3f2fd;
+            color: #1e3c72;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
         }
 
-        .card-content {
-            padding: 20px;
+        /* --- MODAL / POPUP DESIGN --- */
+        .modal-overlay {
+            display: none; /* Erstmal unsichtbar */
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
         }
 
-        h2 {
-            color: #764ba2;
-            margin-top: 0;
-        }
-
-        /* Footer */
-        footer {
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: slideUp 0.3s;
             text-align: center;
-            padding: 20px;
-            background-color: #333;
-            color: white;
-            margin-top: 40px;
         }
 
-        /* Animationen Definitionen */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #aaa;
         }
+        .close-btn:hover { color: #333; }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+        @keyframes slideUp { from {transform:translateY(50px);} to {transform:translateY(0);} }
+
+        footer { text-align: center; padding: 40px; color: #888; margin-top: 50px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Welcome to Seoul</h1>
-        <p class="subtitle">Tradition trifft auf Moderne</p>
+        <h1>Seoul Explorer</h1>
+        <p class="subtitle">Klicke auf eine Karte, um mehr zu erfahren!</p>
     </header>
 
     <div class="container">
         
-        <div class="card">
-            <div class="card-image">
-                <img src="https://images.unsplash.com/photo-1548115184-bc6544d06a58?auto=format&fit=crop&w=800&q=80" alt="Gyeongbokgung Palast">
-            </div>
+        <div class="card" onclick="openModal('Gyeongbokgung Palast', 'Der größte der fünf Paläste. Er wurde 1395 erbaut. Besonders beeindruckend ist die Wachablösung am Gwanghwamun Tor. Tipp: Mit einem Hanbok ist der Eintritt frei!')">
+            <div class="card-image"><img src="https://images.unsplash.com/photo-1548115184-bc6544d06a58?w=500" alt="Palast"></div>
             <div class="card-content">
-                <h2>Gyeongbokgung</h2>
-                <p>Der "Palast der strahlenden Glückseligkeit". Er ist der größte der fünf großen Paläste und ein Meisterwerk der koreanischen Architektur.</p>
-                <p><strong>Tipp:</strong> Besuche die Wachablösung um 10:00 Uhr.</p>
+                <h3>Gyeongbokgung</h3>
+                <p>Der Hauptpalast</p>
+                <span class="info-badge">Mehr Infos →</span>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-image">
-                <img src="https://images.unsplash.com/photo-1535189043414-47a3c49a0bed?auto=format&fit=crop&w=800&q=80" alt="N Seoul Tower">
-            </div>
+        <div class="card" onclick="openModal('N Seoul Tower', 'Ein Fernsehturm auf dem Namsan Berg. Er ist 236 Meter hoch. Paare hängen hier Liebesschlösser auf. Man kommt am besten mit der Seilbahn hin.')">
+            <div class="card-image"><img src="https://images.unsplash.com/photo-1535189043414-47a3c49a0bed?w=500" alt="Tower"></div>
             <div class="card-content">
-                <h2>N Seoul Tower</h2>
-                <p>Das Wahrzeichen der Stadt auf dem Namsan Berg. Besonders bei Nacht bietet er einen atemberaubenden Blick über die Lichter der Metropole.</p>
+                <h3>N Seoul Tower</h3>
+                <p>Das Wahrzeichen</p>
+                <span class="info-badge">Mehr Infos →</span>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-image">
-                <img src="https://images.unsplash.com/photo-1580651315530-69c8e0026377?auto=format&fit=crop&w=800&q=80" alt="Korean Street Food">
-            </div>
+        <div class="card" onclick="openModal('Myeongdong Shopping', 'Das Zentrum für K-Beauty und Street Food. Abends verwandeln sich die Straßen in einen riesigen Markt. Probier das Hummer-Barbecue!')">
+            <div class="card-image"><img src="https://images.unsplash.com/photo-1580651315530-69c8e0026377?w=500" alt="Streetfood"></div>
             <div class="card-content">
-                <h2>Street Food</h2>
-                <p>In Myeongdong oder auf dem Gwangjang Markt findest du die besten Snacks. Probier unbedingt Tteokbokki (scharfe Reiskuchen)!</p>
+                <h3>Myeongdong</h3>
+                <p>Shopping & Essen</p>
+                <span class="info-badge">Mehr Infos →</span>
+            </div>
+        </div>
+
+        <div class="card" onclick="openModal('Bukchon Hanok Village', 'Ein historisches Dorf mitten in der Stadt. Hier stehen hunderte traditionelle koreanische Häuser (Hanoks), in denen heute noch Menschen leben.')">
+            <div class="card-image"><img src="https://images.unsplash.com/photo-1583246830368-20412b509d6f?w=500" alt="Hanok"></div>
+            <div class="card-content">
+                <h3>Bukchon Hanok</h3>
+                <p>Traditionelles Dorf</p>
+                <span class="info-badge">Mehr Infos →</span>
+            </div>
+        </div>
+
+        <div class="card" onclick="openModal('Lotte World Tower', 'Mit 555 Metern das höchste Gebäude Südkoreas. Der Glasboden auf der Aussichtsplattform Seoul Sky ist nichts für schwache Nerven!')">
+            <div class="card-image"><img src="https://images.unsplash.com/photo-1596409893549-b39f1c30575d?w=500" alt="Lotte Tower"></div>
+            <div class="card-content">
+                <h3>Lotte World Tower</h3>
+                <p>Wolkenkratzer</p>
+                <span class="info-badge">Mehr Infos →</span>
+            </div>
+        </div>
+
+        <div class="card" onclick="openModal('DDP - Dongdaemun Design Plaza', 'Ein futuristisches Gebäude von Zaha Hadid. Es sieht aus wie ein gelandetes Raumschiff. Zentrum für Mode, Design und Nachtmärkte.')">
+            <div class="card-image"><img src="https://images.unsplash.com/photo-1538485399081-7191377e8241?w=500" alt="DDP"></div>
+            <div class="card-content">
+                <h3>DDP</h3>
+                <p>Futuristische Architektur</p>
+                <span class="info-badge">Mehr Infos →</span>
+            </div>
+        </div>
+
+        <div class="card" onclick="openModal('Insadong', 'Die Straße der Kultur. Hier findest du Teehäuser, Kunstgalerien, Pinsel, Papier und viele Souvenirs. Perfekt für Geschenke.')">
+            <div class="card-image"><img src="https://images.unsplash.com/photo-1620633436577-3e817cf7b593?w=500" alt="Insadong"></div>
+            <div class="card-content">
+                <h3>Insadong</h3>
+                <p>Kunst & Kultur</p>
+                <span class="info-badge">Mehr Infos →</span>
+            </div>
+        </div>
+
+        <div class="card" onclick="openModal('Changdeokgung & Secret Garden', 'Weltkulturerbe. Bekannt für seinen geheimen Garten (Huwon), der wunderschön in die Natur integriert ist.')">
+            <div class="card-image"><img src="https://images.unsplash.com/photo-1590422501099-b1d5c7df768d?w=500" alt="Changdeokgung"></div>
+            <div class="card-content">
+                <h3>Changdeokgung</h3>
+                <p>Der geheime Garten</p>
+                <span class="info-badge">Mehr Infos →</span>
+            </div>
+        </div>
+
+        <div class="card" onclick="openModal('Hongdae', 'Das Viertel der Jugend. Rund um die Universität gibt es Straßenmusik (Busking), günstige Mode und ein wildes Nachtleben.')">
+            <div class="card-image"><img src="https://images.unsplash.com/photo-1535313986064-1628290f64c1?w=500" alt="Hongdae"></div>
+            <div class="card-content">
+                <h3>Hongdae</h3>
+                <p>Jugend & Musik</p>
+                <span class="info-badge">Mehr Infos →</span>
+            </div>
+        </div>
+
+        <div class="card" onclick="openModal('Cheonggyecheon Stream', 'Ein künstlicher Fluss mitten durch die Stadt. Ein perfekter Ort zum Spazieren und Entspannen zwischen den Hochhäusern.')">
+            <div class="card-image"><img src="https://images.unsplash.com/photo-1563286390-e3256e29705f?w=500" alt="Stream"></div>
+            <div class="card-content">
+                <h3>Cheonggyecheon</h3>
+                <p>Fluss in der City</p>
+                <span class="info-badge">Mehr Infos →</span>
+            </div>
+        </div>
+
+        <div class="card" onclick="openModal('Gangnam District', 'Bekannt durch den Song. Hier ist das moderne Seoul: Wolkenkratzer, Luxusautos und die berühmte COEX Bibliothek.')">
+            <div class="card-image"><img src="https://images.unsplash.com/photo-1520466809213-7b9a56adcd45?w=500" alt="Gangnam"></div>
+            <div class="card-content">
+                <h3>Gangnam</h3>
+                <p>Modern & Schick</p>
+                <span class="info-badge">Mehr Infos →</span>
+            </div>
+        </div>
+
+         <div class="card" onclick="openModal('War Memorial of Korea', 'Ein riesiges Museum über die Militärgeschichte Koreas. Draußen stehen echte Panzer, Flugzeuge und Schiffe.')">
+            <div class="card-image"><img src="https://images.unsplash.com/photo-1599290076937-56747d7c04bb?w=500" alt="War Memorial"></div>
+            <div class="card-content">
+                <h3>War Memorial</h3>
+                <p>Geschichte erleben</p>
+                <span class="info-badge">Mehr Infos →</span>
+            </div>
+        </div>
+
+         <div class="card" onclick="openModal('Ihwa Mural Village', 'Ein kleines Dorf am Hang, das durch wunderschöne Wandmalereien und Kunstwerke berühmte wurde. Tolle Fotospots!')">
+            <div class="card-image"><img src="https://images.unsplash.com/photo-1584803738090-4c3d3175024b?w=500" alt="Art"></div>
+            <div class="card-content">
+                <h3>Ihwa Mural Village</h3>
+                <p>Straßenkunst</p>
+                <span class="info-badge">Mehr Infos →</span>
             </div>
         </div>
 
     </div>
 
     <footer>
-        <p>Erstellt für das Informatik Code Review | © 2026</p>
+        <p>© 2026 Seoul Tour Guide Project</p>
     </footer>
+
+    <div id="infoModal" class="modal-overlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Titel</h2>
+            <p id="modalText">Beschreibung...</p>
+        </div>
+    </div>
+
+    <script>
+        function openModal(title, text) {
+            // Text setzen
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalText').innerText = text;
+            
+            // Modal anzeigen
+            document.getElementById('infoModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            // Modal verstecken
+            document.getElementById('infoModal').style.display = 'none';
+        }
+    </script>
 
 </body>
 </html>
