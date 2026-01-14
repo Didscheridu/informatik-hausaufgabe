@@ -2,20 +2,167 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Code Review Aufgabe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entdecke Seoul</title>
+    
+    <style>
+        /* --- DESIGN & CSS (Das Styling) --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Header Bereich mit Farbverlauf */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        p.subtitle {
+            font-size: 1.2em;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        /* Container für den Inhalt */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Die Karten (Cards) */
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0; /* Startet unsichtbar für Animation */
+            animation: slideUp 0.8s forwards;
+        }
+
+        /* Verzögerung der Animation für jede Karte */
+        .card:nth-child(1) { animation-delay: 0.2s; }
+        .card:nth-child(2) { animation-delay: 0.4s; }
+        .card:nth-child(3) { animation-delay: 0.6s; }
+
+        /* Hover Effekt: Karte hebt sich */
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Bilder in den Karten */
+        .card-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        /* Hover Effekt: Bild zoomt */
+        .card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-top: 0;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+            margin-top: 40px;
+        }
+
+        /* Animationen Definitionen */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
-    <h1>Mein Informatik-Projekt</h1>
-    
-    <p>Das ist meine Lösung für die Hausaufgabe. Der Code ist sauber formatiert.</p>
-    
-    <h2>Was ich gelernt habe:</h2>
-    <ul>
-        <li>Wie man Tags öffnet und schließt</li>
-        <li>Wie man Listen erstellt</li>
-        <li>Wie man Code auf GitHub hochlädt</li>
-    </ul>
-    
-    <p>Danke fürs Durchlesen!</p>
+
+    <header>
+        <h1>Welcome to Seoul</h1>
+        <p class="subtitle">Tradition trifft auf Moderne</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="card">
+            <div class="card-image">
+                <img src="https://images.unsplash.com/photo-1548115184-bc6544d06a58?auto=format&fit=crop&w=800&q=80" alt="Gyeongbokgung Palast">
+            </div>
+            <div class="card-content">
+                <h2>Gyeongbokgung</h2>
+                <p>Der "Palast der strahlenden Glückseligkeit". Er ist der größte der fünf großen Paläste und ein Meisterwerk der koreanischen Architektur.</p>
+                <p><strong>Tipp:</strong> Besuche die Wachablösung um 10:00 Uhr.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-image">
+                <img src="https://images.unsplash.com/photo-1535189043414-47a3c49a0bed?auto=format&fit=crop&w=800&q=80" alt="N Seoul Tower">
+            </div>
+            <div class="card-content">
+                <h2>N Seoul Tower</h2>
+                <p>Das Wahrzeichen der Stadt auf dem Namsan Berg. Besonders bei Nacht bietet er einen atemberaubenden Blick über die Lichter der Metropole.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-image">
+                <img src="https://images.unsplash.com/photo-1580651315530-69c8e0026377?auto=format&fit=crop&w=800&q=80" alt="Korean Street Food">
+            </div>
+            <div class="card-content">
+                <h2>Street Food</h2>
+                <p>In Myeongdong oder auf dem Gwangjang Markt findest du die besten Snacks. Probier unbedingt Tteokbokki (scharfe Reiskuchen)!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>Erstellt für das Informatik Code Review | © 2026</p>
+    </footer>
+
 </body>
 </html>
