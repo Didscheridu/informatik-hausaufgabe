@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Der ultimative Reiseführer für Seoul, Südkorea. Ein Schulprojekt.">
-    <title>NEON SEOUL | v5.0 (Legal Compliance)</title>
+    <meta name="description" content="Der ultimative Reiseführer für Seoul. Ein Schulprojekt von Kayden.">
+    <title>NEON SEOUL | v6.0 (Cookie Wall & ID System)</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,7 @@
     
     <style>
         /* =========================================
-           1. GRUNDEINSTELLUNGEN & VARIABLEN
+           1. GRUNDLAGEN (Variablen)
            ========================================= */
         :root {
             --bg-dark: #050505;
@@ -26,203 +26,220 @@
             --header-height: 80px;
         }
 
-        html { scroll-behavior: smooth; }
-        body { margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; background-color: var(--bg-dark); color: var(--primary); overflow-x: hidden; }
+        html, body {
+            margin: 0; padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--primary);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
 
-        /* Scrollbar */
+        /* Scrollbalken */
         ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
         ::-webkit-scrollbar-thumb { background: var(--neon-purple); border-radius: 5px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--neon-pink); }
 
         /* =========================================
-           2. LOADER & NAV
+           2. COOKIE WALL (Der Blocker)
+           ========================================= */
+        #cookieWall {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.95); /* Fast undurchsichtig */
+            backdrop-filter: blur(15px);
+            z-index: 99999; /* Über ALLEM anderen */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Wenn ausgeblendet, dann ganz weg damit man klicken kann */
+        #cookieWall.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .cookie-box {
+            background: var(--bg-panel);
+            width: 90%; max-width: 500px;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
+            transform: scale(1);
+            transition: transform 0.3s;
+        }
+
+        .cookie-box h2 {
+            margin-top: 0;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+        }
+
+        .cookie-box p {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .cookie-btn {
+            background: var(--neon-pink);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(188, 19, 254, 0.4);
+        }
+
+        .cookie-btn:hover {
+            background: var(--neon-cyan);
+            color: black;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.6);
+            transform: scale(1.05);
+        }
+
+        /* =========================================
+           3. LOADER & NAV
            ========================================= */
         #loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--bg-dark); z-index: 9999;
+            background-color: var(--bg-dark); z-index: 10000; /* Unter Cookie Wall, über Seite */
             display: flex; justify-content: center; align-items: center; flex-direction: column;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity 0.5s;
         }
-        .loader-circle {
-            width: 80px; height: 80px;
-            border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--neon-cyan);
-            border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;
-            box-shadow: 0 0 20px var(--neon-cyan);
-        }
-        .loader-text { font-size: 1.2rem; letter-spacing: 5px; animation: pulseText 1.5s infinite; }
         .loader-hidden { opacity: 0; visibility: hidden; }
+        .loader-circle { width: 60px; height: 60px; border: 4px solid #333; border-top: 4px solid var(--neon-cyan); border-radius: 50%; animation: spin 1s infinite; margin-bottom: 15px; }
 
         nav {
             position: fixed; top: 0; width: 100%; height: var(--header-height);
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 50px; box-sizing: border-box; z-index: 100;
-            transition: all 0.4s ease; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            padding: 0 50px; z-index: 100; transition: 0.4s;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
         }
         nav.scrolled { background: rgba(5, 5, 5, 0.95); border-bottom: 1px solid rgba(255,255,255,0.1); height: 60px; }
-        .nav-logo { font-weight: 900; font-size: 1.5rem; color: var(--primary); text-decoration: none; text-transform: uppercase; letter-spacing: 2px; }
+        .nav-logo { font-weight: 900; font-size: 1.5rem; color: white; text-decoration: none; text-transform: uppercase; }
         .nav-logo span { color: var(--neon-cyan); }
         .nav-links { display: flex; gap: 30px; }
-        .nav-links a { text-decoration: none; color: var(--primary); font-weight: 600; text-transform: uppercase; position: relative; transition: color 0.3s; font-size: 0.9rem;}
+        .nav-links a { text-decoration: none; color: white; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; transition: 0.3s; }
         .nav-links a:hover { color: var(--neon-cyan); }
 
         /* =========================================
-           3. HERO & FILTER
+           4. HEADER
            ========================================= */
-        header { height: 100vh; width: 100%; position: relative; display: flex; justify-content: center; align-items: center; text-align: center; overflow: hidden; }
+        header { height: 100vh; position: relative; display: flex; justify-content: center; align-items: center; text-align: center; overflow: hidden; }
+        
+        /* Das Hintergrundbild wird auch per ID geladen */
         .hero-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('https://images.unsplash.com/photo-1538485399081-7191377e8241?q=80&w=1920');
+            background-color: #111;
             background-size: cover; background-position: center; z-index: -1;
-            filter: brightness(0.6); transform: scale(1.1); animation: subtleZoom 20s infinite alternate;
+            filter: brightness(0.5); transform: scale(1.1); animation: zoom 20s infinite alternate;
         }
-        .hero-content { z-index: 1; padding: 20px; }
-        .hero-badge { background-color: var(--neon-purple); padding: 5px 15px; border-radius: 50px; font-size: 0.9rem; font-weight: bold; text-transform: uppercase; margin-bottom: 20px; display: inline-block; box-shadow: 0 0 15px var(--neon-purple); animation: fadeInDown 1s ease; }
-        h1 { font-size: 5rem; margin: 0; font-weight: 900; line-height: 1.1; text-transform: uppercase; text-shadow: 3px 3px 0px rgba(188, 19, 254, 0.7), -3px -3px 0px rgba(0, 243, 255, 0.7); animation: fadeIn 1.5s ease; }
-        .hero-subtitle { font-size: 1.5rem; margin-top: 20px; color: var(--secondary); font-weight: 300; max-width: 600px; margin-left: auto; margin-right: auto; animation: fadeInUp 1s ease 0.5s backwards; }
-        .scroll-indicator { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); animation: bounce 2s infinite; opacity: 0.7; }
 
-        .filter-section { padding: 50px 20px; text-align: center; background-color: var(--bg-dark); position: sticky; top: 60px; z-index: 90; backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .filter-btn { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--secondary); padding: 10px 25px; margin: 5px; border-radius: 30px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 600; transition: all 0.3s ease; }
-        .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
-        .filter-btn.active { background-color: var(--neon-cyan); color: #000; border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); transform: scale(1.05); }
+        .hero-content { z-index: 1; padding: 20px; }
+        h1 { font-size: 5rem; margin: 0; font-weight: 900; line-height: 1.1; text-transform: uppercase; text-shadow: 3px 3px 0px rgba(188,19,254,0.7), -3px -3px 0px rgba(0,243,255,0.7); animation: fadeIn 1.5s; }
+        .hero-subtitle { font-size: 1.5rem; margin-top: 20px; color: var(--secondary); max-width: 600px; margin-left: auto; margin-right: auto; }
 
         /* =========================================
-           4. GRID & CARDS
+           5. GRID & FILTER
            ========================================= */
+        .filter-section { padding: 40px 20px; text-align: center; background: var(--bg-dark); position: sticky; top: 60px; z-index: 90; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .filter-btn { background: transparent; border: 1px solid #333; color: var(--secondary); padding: 8px 25px; margin: 5px; border-radius: 30px; cursor: pointer; font-family: inherit; font-weight: bold; transition: 0.3s; }
+        .filter-btn:hover, .filter-btn.active { background: var(--neon-cyan); color: black; border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0,243,255,0.4); }
+
         .container { max-width: var(--container-width); margin: 0 auto; padding: 50px 20px; min-height: 100vh; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        
         .card {
-            background-color: var(--bg-panel); border-radius: 20px; overflow: hidden; position: relative;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer;
+            background: var(--bg-panel); border-radius: 20px; overflow: hidden;
             border: 1px solid rgba(255,255,255,0.05); height: 450px; display: flex; flex-direction: column;
+            transition: transform 0.4s; cursor: pointer;
         }
-        .card:hover { transform: translateY(-10px); border-color: var(--neon-purple); box-shadow: 0 10px 30px rgba(122, 4, 235, 0.2); }
-        .card-img-wrapper { height: 250px; overflow: hidden; position: relative; background-color: #222; }
-        .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
+        .card:hover { transform: translateY(-10px); border-color: var(--neon-purple); box-shadow: 0 10px 30px rgba(122,4,235,0.2); }
+        
+        .card-img-wrapper { height: 250px; overflow: hidden; position: relative; background: #222; }
+        .card-img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
         .card:hover .card-img { transform: scale(1.15); }
-        .card-overlay { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); padding: 5px 12px; border-radius: 15px; font-size: 0.75rem; color: var(--neon-cyan); font-weight: bold; border: 1px solid var(--neon-cyan); z-index: 2; }
+        
+        .card-overlay { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.7); padding: 5px 12px; border-radius: 15px; font-size: 0.7rem; color: var(--neon-cyan); font-weight: bold; border: 1px solid var(--neon-cyan); }
         .card-content { padding: 25px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .card-title { font-size: 1.4rem; margin: 0 0 10px 0; font-weight: 800; }
-        .card-preview { font-size: 0.95rem; color: var(--secondary); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        .card-footer { margin-top: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--secondary); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; }
-        .read-more { color: var(--neon-pink); font-weight: bold; }
+        .card-preview { font-size: 0.9rem; color: var(--secondary); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .card-footer { margin-top: 20px; display: flex; justify-content: space-between; font-size: 0.8rem; color: #666; border-top: 1px solid #222; padding-top: 15px; }
 
         /* =========================================
-           5. LEGAL STUFF (Banner & Footer)
+           6. FOOTER
            ========================================= */
-        
-        /* Cookie Banner */
-        #cookieBanner {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 600px;
-            background: rgba(16, 16, 21, 0.95);
-            border: 1px solid var(--neon-cyan);
-            border-radius: 15px; padding: 20px;
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
-            z-index: 10000;
-            display: flex; justify-content: space-between; align-items: center;
-            opacity: 0; visibility: hidden; transition: all 0.5s;
-        }
-        #cookieBanner.show { opacity: 1; visibility: visible; bottom: 30px; }
-        .cookie-text { font-size: 0.85rem; color: #ccc; margin-right: 20px; }
-        .cookie-btn {
-            background: var(--neon-cyan); color: #000; border: none;
-            padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer;
-            white-space: nowrap; transition: 0.3s;
-        }
-        .cookie-btn:hover { background: white; box-shadow: 0 0 15px white; }
-
-        /* Footer */
-        footer { background-color: #000; padding: 80px 20px 30px 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+        footer { background: black; padding: 80px 20px 30px; border-top: 1px solid #222; }
         .footer-content { max-width: var(--container-width); margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; }
-        .footer-col h3 { color: var(--primary); font-size: 1.2rem; margin-bottom: 20px; position: relative; padding-bottom: 10px; }
-        .footer-col h3::after { content: ''; position: absolute; bottom: 0; left: 0; width: 30px; height: 3px; background: var(--neon-purple); }
-        .footer-col p { color: var(--secondary); line-height: 1.6; }
-        .footer-links { list-style: none; padding: 0; }
+        .footer-col h3 { color: white; margin-bottom: 20px; border-bottom: 2px solid var(--neon-purple); display: inline-block; padding-bottom: 5px; }
+        .footer-links { list-style: none; padding: 0; color: var(--secondary); }
         .footer-links li { margin-bottom: 10px; }
-        .footer-links a { color: var(--secondary); text-decoration: none; transition: 0.3s; cursor: pointer; }
-        .footer-links a:hover { color: var(--neon-cyan); padding-left: 5px; }
-        .copyright { text-align: center; margin-top: 60px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); font-size: 0.8rem; }
+        .footer-links a { color: var(--secondary); text-decoration: none; cursor: pointer; }
+        .footer-links a:hover { color: var(--neon-cyan); }
 
         /* =========================================
-           6. MODALS (Popups)
+           7. MODAL
            ========================================= */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
-            z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px;
-            opacity: 0; visibility: hidden; transition: all 0.3s ease;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); z-index: 2000;
+            display: flex; justify-content: center; align-items: center; padding: 20px;
+            opacity: 0; visibility: hidden; transition: 0.3s;
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         
-        /* Main Attraction Modal */
         .modal-container {
-            background-color: var(--bg-panel); width: 1000px; max-width: 100%; max-height: 90vh;
+            background: var(--bg-panel); width: 1000px; max-width: 100%; max-height: 90vh;
             border-radius: 25px; overflow: hidden; display: flex; position: relative;
-            box-shadow: 0 0 50px rgba(188, 19, 254, 0.2); border: 1px solid rgba(255,255,255,0.1);
-            transform: scale(0.8) translateY(50px); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid #333; transform: scale(0.9); transition: 0.4s;
         }
-        .modal-overlay.active .modal-container { transform: scale(1) translateY(0); }
-        .modal-image-side { width: 50%; background-size: cover; background-position: center; position: relative; background-color: #000; }
-        .modal-image-side::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, var(--bg-panel), transparent); }
-        .modal-info-side { width: 50%; padding: 50px; overflow-y: auto; }
+        .modal-overlay.active .modal-container { transform: scale(1); }
         
-        /* Legal Text Modal (Simplified) */
-        .legal-modal-container {
-            background-color: var(--bg-panel); width: 600px; max-width: 100%; max-height: 80vh;
-            border-radius: 25px; padding: 40px; position: relative; overflow-y: auto;
-            border: 1px solid var(--neon-cyan); box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
-            transform: scale(0.8); transition: all 0.3s;
-        }
-        .modal-overlay.active .legal-modal-container { transform: scale(1); }
+        .modal-image-side { width: 50%; background-size: cover; background-position: center; }
+        .modal-info-side { width: 50%; padding: 40px; overflow-y: auto; }
+        .modal-close { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 10; }
+        .modal-close:hover { background: var(--neon-pink); }
 
-        .modal-close {
-            position: absolute; top: 20px; right: 20px; width: 40px; height: 40px;
-            background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            cursor: pointer; transition: 0.3s; z-index: 10;
-        }
-        .modal-close:hover { background: var(--neon-pink); transform: rotate(90deg); }
-        
-        .modal-category { color: var(--neon-cyan); font-size: 0.9rem; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block; }
-        .modal-title { font-size: 2.5rem; margin: 0 0 20px 0; line-height: 1.1; }
-        .modal-desc { line-height: 1.8; color: #ccc; margin-bottom: 30px; }
-        .modal-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; }
-
-        /* Animation Keyframes */
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes pulseText { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        @keyframes subtleZoom { from { transform: scale(1.1); } to { transform: scale(1.2); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);} 40% {transform: translateY(-10px) translateX(-50%);} 60% {transform: translateY(-5px) translateX(-50%);} }
+        @keyframes zoom { from { transform: scale(1.1); } to { transform: scale(1.2); } }
 
-        /* Mobile */
         @media (max-width: 768px) {
             h1 { font-size: 3rem; }
-            .modal-container { flex-direction: column; height: 100%; border-radius: 0; }
+            .modal-container { flex-direction: column; }
             .modal-image-side { width: 100%; height: 250px; }
-            .modal-info-side { width: 100%; padding: 25px; }
+            .modal-info-side { width: 100%; }
             .nav-links { display: none; }
-            .filter-section { overflow-x: auto; white-space: nowrap; padding-bottom: 15px;}
-            #cookieBanner { flex-direction: column; text-align: center; }
-            .cookie-text { margin-bottom: 15px; margin-right: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <div class="loader-circle"></div>
-        <div class="loader-text">SYSTEM LOADING...</div>
+    <div id="cookieWall">
+        <div class="cookie-box">
+            <h2>Systemzugriff</h2>
+            <p>Willkommen im Seoul Cyber Guide.</p>
+            <p>Um Zugriff auf die Datenbank zu erhalten, müssen Sie der Verwendung von technischen Cookies zustimmen. Dies ist ein Schulprojekt ohne kommerzielle Datennutzung.</p>
+            <p style="font-size: 0.8rem; opacity: 0.7;">Status: Warte auf Eingabe...</p>
+            <button class="cookie-btn" onclick="acceptAll()">Akzeptieren & Starten</button>
+        </div>
     </div>
 
-    <div id="cookieBanner">
-        <div class="cookie-text">
-            🍪 <strong>Cookie-Hinweis:</strong> Wir nutzen Cookies, um dir das beste Erlebnis zu bieten. Da dies ein Schulprojekt ist, werden keine echten Daten gespeichert.
-        </div>
-        <button class="cookie-btn" onclick="acceptCookies()">Akzeptieren</button>
+    <div id="loader">
+        <div class="loader-circle"></div>
+        <p style="letter-spacing: 5px;">LOADING...</p>
     </div>
 
     <nav id="navbar">
@@ -230,19 +247,17 @@
         <div class="nav-links">
             <a href="#home">Home</a>
             <a href="#explore">Entdecken</a>
-            <a href="#about">Über Uns</a>
+            <a href="#about">Infos</a>
             <a href="#contact">Kontakt</a>
         </div>
     </nav>
 
     <header id="home">
-        <div class="hero-bg"></div>
+        <div class="hero-bg" id="heroBg"></div>
         <div class="hero-content">
-            <div class="hero-badge">Welcome to 2026</div>
-            <h1>Seoul<br>Cyber City</h1>
-            <p class="hero-subtitle">Erlebe eine Stadt, in der Jahrtausende alte Traditionen auf die Technologie von morgen treffen.</p>
+            <h1 style="color:white;">Seoul<br>Cyber City</h1>
+            <p class="hero-subtitle">Tradition trifft auf Zukunft.</p>
         </div>
-        <div class="scroll-indicator">⬇</div>
     </header>
 
     <section class="filter-section" id="explore">
@@ -251,7 +266,6 @@
         <button class="filter-btn" data-filter="modern">Modern</button>
         <button class="filter-btn" data-filter="food">Essen</button>
         <button class="filter-btn" data-filter="nature">Natur</button>
-        <button class="filter-btn" data-filter="art">Kunst</button>
     </section>
 
     <div class="container">
@@ -263,22 +277,12 @@
             <div class="footer-col">
                 <h3>Rechtliches</h3>
                 <ul class="footer-links">
-                    <li><a onclick="openLegalModal('impressum')">Impressum</a></li>
-                    <li><a onclick="openLegalModal('privacy')">Datenschutzerklärung</a></li>
-                    <li><a onclick="openLegalModal('disclaimer')">Haftungsausschluss</a></li>
-                </ul>
-                <p style="margin-top: 15px; font-size: 0.8rem; color: #666;">* Dies ist ein reines Schulprojekt ohne kommerzielle Absichten.</p>
-            </div>
-            <div class="footer-col">
-                <h3>Wichtige Links</h3>
-                <ul class="footer-links">
-                    <li><a href="https://english.visitseoul.net/" target="_blank">Visit Seoul Official</a></li>
-                    <li><a href="#">Metro Plan Seoul</a></li>
-                    <li><a href="#">Visum Informationen</a></li>
+                    <li><a onclick="alert('Impressum: Kayden, 8C, Informatik Projekt')">Impressum</a></li>
+                    <li><a onclick="alert('Datenschutz: Keine Datenspeicherung.')">Datenschutz</a></li>
                 </ul>
             </div>
             <div class="footer-col" id="contact">
-                <h3>Projektleitung</h3>
+                <h3>Kontakt</h3>
                 <ul class="footer-links">
                     <li>Schüler: Kayden</li>
                     <li>Klasse: 8C</li>
@@ -287,108 +291,222 @@
                 </ul>
             </div>
         </div>
-        <div class="copyright">
-            © 2026 Seoul Guide Project | Version 5.0 (Legal Compliance Edition)
-        </div>
+        <div class="copyright">© 2026 Seoul Guide Project | Version 6.0</div>
     </footer>
 
     <div class="modal-overlay" id="attractionModal">
         <div class="modal-container">
-            <div class="modal-close" onclick="closeModal('attractionModal')">✕</div>
+            <div class="modal-close" onclick="closeModal()">✕</div>
             <div class="modal-image-side" id="modalImg"></div>
             <div class="modal-info-side">
                 <span class="modal-category" id="modalCat"></span>
-                <h2 class="modal-title" id="modalTitle"></h2>
-                <div class="modal-desc" id="modalDesc"></div>
-                <div class="modal-meta">
-                    <div class="meta-item"><h4>Standort</h4><p id="modalLoc"></p></div>
-                    <div class="meta-item"><h4>Preis</h4><p id="modalPrice"></p></div>
+                <h2 id="modalTitle"></h2>
+                <div id="modalDesc" style="line-height: 1.8; color: #ccc;"></div>
+                <br>
+                <div style="background: #222; padding: 15px; border-radius: 10px;">
+                    <strong>Ort:</strong> <span id="modalLoc"></span><br>
+                    <strong>Preis:</strong> <span id="modalPrice"></span>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="legalModal">
-        <div class="legal-modal-container">
-            <div class="modal-close" onclick="closeModal('legalModal')">✕</div>
-            <h2 class="modal-title" id="legalTitle">Rechtliches</h2>
-            <div class="modal-desc" id="legalText"></div>
-        </div>
-    </div>
-
     <script>
-        /* DATEN */
+        /* =========================================
+           BILDER-DATENBANK (NUR IDs!)
+           =========================================
+           Wir nutzen hier nur die eindeutige ID von Unsplash.
+           Das Skript unten baut daraus den funktionierenden Link.
+           Dies sind lizenzfreie Bilder (Unsplash License).
+        */
+        const unsplashBase = "https://images.unsplash.com/photo-";
+        const unsplashParams = "?auto=format&fit=crop&w=800&q=80"; // Optimierte Qualität
+
         const attractions = [
-            { id: 1, title: "Gyeongbokgung Palast", category: "history", image: "https://lh3.googleusercontent.com/rd-gg-dl/ABS2GSlKNfgpoXbugXz2a6pQc2rk6P9ndJjUvIQ9EDrxayR9KBeTY3PrqsvERFZdDMHr38fktMVfSp7LUcqBBGsSG5X1xSHvkoyLdJeDz-GPVJmrEBQb3_XNS5sAvtcB0EDwzyB7z9ZXwysez-RE-u9eM9a7mLLNhIOTnfHDTr8nGtx35xpfq5R4gsrtm2mVyeZxH34oU6q7Bf_NpO2IuLYJRhzWL98GjEyRK7mc6zh0_M4ngIC0uXq76Z37Zdd2sCW-NH0JwRAtofZBaYgoQzHUVlwXcJjabsHzoBCEkPmijDd3Pb3wweD2pql8xKbNFvhTSuw1j1POLB8VUWsCrLoKtRbNaKmaMqQDXciSknW0yj-hToRCVWbNNvUWESHsbdfUJV00B9AEBPhXN5JjQwFGwB7LPtFRKuPohrIANrxQ9zCSi_naFbS7WkRoiafUelGPKRmuI-4LVjxOoEazH0FlsPgXwxAUbUniEpaNSDhNv5uQedhMau9Ndnpm1mTyOQeHGkL9QmYcB2awgKoU97WaZPqln2Ek4q3Vx-x-dzlV4tcYAZh7gKZVNi5HRIMGi7VICDQ5XwKR9htQIgCWF6sa_Yyett3TB_JNpxIjDweiKq_xmZET0T79253PcMoAVHOfUuXJOh9S_lbQNq8xATzi_-xadN1cJG8it8ejTRoWHkSewY8EO_wv9VaD59RN-mxrX65aOmLXnGEFQOD1zc-klAL7d47xp3OafBlIK75-95i16gyUJmwaVyJkDa-tpOha2x2hXg4x64CsJ7-Mtqjxmx0_-jQRFg8vIV5Pa6lJpkMciqUZvv8g1I8AAV8Dqu4pyNBfwotQVFDQ6l-WaaGWmiyQ0jd-TvoEI3XdhXBMR_9efdXf8ZGI4wUYFi8mzieM3p3LhB2zZflJEwt2WeUlvmec7M0QwndxOTGFgC6BQX66rNMdmbsULHHZKx1q5iX1QLrfiitS1rTPVVlPDe9UuCVujFq6Rwg9U8trUBraRIEtGnZ15VYJJfSAsGstBXw8aFlfRBLBcAlG2d2YeDUK86Jv9HlnHBcgMBaQs9WkTKkS5TDMdLyropT8dzyzrklspbAOLnBfjHIDWa6kPTSCRNf7WcYYePRvDys29C7Ky-yI5qlcpNKIjgXivItAAYn5kVTK1nT4QJNNh9OQgNc4hSfXTUYJQSEgu387Q_NEIbOPD3a2cLF2cJ4TC4Rl2_tqqUC6PH7mpp7yBh9TIamH=s1024-rj", desc: "Der größte und wichtigste der fünf Paläste. 1395 erbaut, dient er als Symbol der Joseon-Dynastie. Die Wachablösung ist weltberühmt. Wenn du traditionelle Kleidung (Hanbok) trägst, kommst du kostenlos rein!", location: "Jongno-gu", price: "3,000 KRW" },
-            { id: 2, title: "N Seoul Tower", category: "modern", image: "https://images.unsplash.com/photo-1535189043414-47a3c49a0bed?w=800", desc: "Der ikonische Fernsehturm auf dem Namsan Berg. Er ist 236 Meter hoch und bietet den besten 360-Grad-Blick über die Stadt. Besonders romantisch bei Sonnenuntergang.", location: "Namsan Park", price: "16,000 KRW" },
-            { id: 3, title: "Myeongdong Market", category: "food", image: "https://images.unsplash.com/photo-1536236155322-15e263091826?w=800", desc: "Ein Paradies für Foodies und Shopaholics. Hier gibt es das beste Street Food: Von Lobster-Schwänzen bis zu 30cm hohem Eis. Außerdem ist es das Zentrum für K-Beauty.", location: "Jung-gu", price: "Variabel" },
-            { id: 4, title: "Bukchon Hanok Village", category: "history", image: "https://images.unsplash.com/photo-1610425851516-2818fa952608?w=800", desc: "Ein historisches Dorf mit hunderten traditionellen koreanischen Häusern (Hanok). Es liegt malerisch zwischen zwei Palästen und bietet tolle Fotospots.", location: "Jongno-gu", price: "Kostenlos" },
-            { id: 5, title: "Lotte World Tower", category: "modern", image: "https://images.unsplash.com/photo-1604938507099-224114574637?w=800", desc: "Mit 555 Metern das höchste Gebäude Koreas und das fünfthöchste der Welt. Die Aussichtsplattform 'Seoul Sky' hat einen Glasboden, auf dem man über dem Abgrund steht.", location: "Songpa-gu", price: "27,000 KRW" },
-            { id: 6, title: "Dongdaemun Design Plaza", category: "modern", image: "https://images.unsplash.com/photo-1617955069029-71c449eb083e?w=800", desc: "Ein futuristisches Gebäude, entworfen von Zaha Hadid. Es sieht aus wie ein gelandetes Raumschiff. Nachts leuchtet es spektakulär und beherbergt Design-Ausstellungen.", location: "Dongdaemun", price: "Kostenlos" },
-            { id: 7, title: "Insadong Street", category: "art", image: "https://images.unsplash.com/photo-1618831521065-6f6450756998?w=800", desc: "Das kulturelle Herz der Stadt. Hier findest du Antiquitäten, Kunstgalerien, Pinsel, Papier und traditionelle Teehäuser in verwinkelten Gassen.", location: "Insa-dong", price: "Kostenlos" },
-            { id: 8, title: "Hongdae", category: "modern", image: "https://images.unsplash.com/photo-1569171227039-299c13136731?w=800", desc: "Das Viertel der Jugend und Musik. Bekannt für Straßenmusiker (Busking), günstige Mode, Karaoke-Bars und ein pulsierendes Nachtleben rund um die Universität.", location: "Mapo-gu", price: "Kostenlos" },
-            { id: 9, title: "Cheonggyecheon Stream", category: "nature", image: "https://images.unsplash.com/photo-1605017668474-e93042c12346?w=800", desc: "Eine Oase der Ruhe. Dieser 11km lange Fluss fließt mitten durch das Stadtzentrum, tiefergelegt unter dem Straßenniveau. Perfekt für Spaziergänge.", location: "Jongno-gu", price: "Kostenlos" },
-            { id: 10, title: "Gangnam District", category: "modern", image: "https://images.unsplash.com/photo-1617936827258-096320583608?w=800", desc: "Der wohlhabendste Bezirk ('Beverly Hills von Seoul'). Bekannt für K-Pop, Luxusshopping, plastische Chirurgie und die riesige COEX Mall.", location: "Gangnam-gu", price: "Teuer" },
-            { id: 11, title: "Changdeokgung & Huwon", category: "history", image: "https://images.unsplash.com/photo-1570966164253-562513292796?w=800", desc: "UNESCO Weltkulturerbe. Besonders berühmt für den 'Geheimen Garten' (Huwon), der wunderschön in die natürliche Landschaft integriert wurde.", location: "Jongno-gu", price: "8,000 KRW" },
-            { id: 12, title: "War Memorial of Korea", category: "history", image: "https://images.unsplash.com/photo-1614611623554-205310415158?w=800", desc: "Ein riesiges Museum zur Militärgeschichte Koreas. Draußen sind echte Flugzeuge, Panzer und Schiffe ausgestellt, die man besichtigen kann.", location: "Yongsan-gu", price: "Kostenlos" },
-            { id: 13, title: "Gwangjang Market", category: "food", image: "https://images.unsplash.com/photo-1556909835-69753963321f?w=800", desc: "Einer der ältesten Märkte Koreas. Berühmt für Bindaetteok (Mungbohnenpfannkuchen) und rohes Rindfleisch (Yukhoe). Sehr authentisch!", location: "Jongno-gu", price: "Günstig" },
-            { id: 14, title: "Ihwa Mural Village", category: "art", image: "https://images.unsplash.com/photo-1605619854663-060386153250?w=800", desc: "Ein Dorf am Hang, das durch Kunst gerettet wurde. Überall an den Wänden und Treppen finden sich bunte Malereien und Skulpturen.", location: "Ihwa-dong", price: "Kostenlos" },
-            { id: 15, title: "Bukhansan National Park", category: "nature", image: "https://images.unsplash.com/photo-1609943801209-846361626875?w=800", desc: "Wandern in der Großstadt? Ja! Dieser Nationalpark liegt direkt am Stadtrand und bietet steile Granitgipfel mit Wahnsinns-Aussicht.", location: "Dobong-gu", price: "Kostenlos" },
-            { id: 16, title: "Starfield Library", category: "art", image: "https://images.unsplash.com/photo-1592052718886-72168076372e?w=800", desc: "Eine öffentliche Bibliothek mitten in einem Einkaufszentrum. Die 13 Meter hohen Bücherregale sind ein extrem beliebter Instagram-Spot.", location: "COEX Mall", price: "Kostenlos" }
+            { 
+                id: 1, 
+                title: "Gyeongbokgung Palast", 
+                category: "history", 
+                imgID: "1548115184-bc6544d06a58", // ID statt Link!
+                desc: "Der größte Palast der Joseon-Dynastie. Die Wachablösung ist ein Muss.", 
+                location: "Jongno-gu", price: "3,000 KRW" 
+            },
+            { 
+                id: 2, 
+                title: "N Seoul Tower", 
+                category: "modern", 
+                imgID: "1535189043414-47a3c49a0bed", 
+                desc: "Das Wahrzeichen Seouls auf dem Namsan Berg. Perfekt für Sonnenuntergänge.", 
+                location: "Namsan Park", price: "16,000 KRW" 
+            },
+            { 
+                id: 3, 
+                title: "Myeongdong", 
+                category: "food", 
+                imgID: "1580651315530-69c8e0026377", 
+                desc: "Street Food Paradies. Hier gibt es alles von Hummer bis 30cm Eis.", 
+                location: "Jung-gu", price: "Variabel" 
+            },
+            { 
+                id: 4, 
+                title: "Bukchon Hanok", 
+                category: "history", 
+                imgID: "1583246830368-20412b509d6f", 
+                desc: "Traditionelles Dorf mit hunderten Hanok-Häusern mitten in der Stadt.", 
+                location: "Jongno-gu", price: "Kostenlos" 
+            },
+            { 
+                id: 5, 
+                title: "Lotte Tower", 
+                category: "modern", 
+                imgID: "1596409893549-b39f1c30575d", 
+                desc: "Das höchste Gebäude Koreas (555m) mit Glasboden-Plattform.", 
+                location: "Songpa-gu", price: "27,000 KRW" 
+            },
+            { 
+                id: 6, 
+                title: "DDP Plaza", 
+                category: "modern", 
+                imgID: "1538485399081-7191377e8241", 
+                desc: "Futuristische Architektur von Zaha Hadid. Sieht aus wie ein Raumschiff.", 
+                location: "Dongdaemun", price: "Kostenlos" 
+            },
+            { 
+                id: 7, 
+                title: "Insadong", 
+                category: "art", 
+                imgID: "1620633436577-3e817cf7b593", 
+                desc: "Kulturstraße mit Teehäusern, Galerien und traditionellen Souvenirs.", 
+                location: "Insa-dong", price: "Kostenlos" 
+            },
+            { 
+                id: 8, 
+                title: "Hongdae", 
+                category: "modern", 
+                imgID: "1535313986064-1628290f64c1", 
+                desc: "Studentenviertel, bekannt für Straßenmusik, Clubs und Mode.", 
+                location: "Mapo-gu", price: "Kostenlos" 
+            },
+            { 
+                id: 9, 
+                title: "Cheonggyecheon", 
+                category: "nature", 
+                imgID: "1563286390-e3256e29705f", 
+                desc: "Ein künstlicher Flusslauf quer durch die City. Eine Oase der Ruhe.", 
+                location: "Jongno-gu", price: "Kostenlos" 
+            },
+            { 
+                id: 10, 
+                title: "Gangnam", 
+                category: "modern", 
+                imgID: "1520466809213-7b9a56adcd45", 
+                desc: "Luxusviertel, bekannt durch den Song. Shopping und K-Pop.", 
+                location: "Gangnam-gu", price: "Teuer" 
+            },
+            { 
+                id: 11, 
+                title: "Changdeokgung", 
+                category: "history", 
+                imgID: "1590422501099-b1d5c7df768d", 
+                desc: "UNESCO Welterbe mit dem berühmten 'Geheimen Garten' (Huwon).", 
+                location: "Jongno-gu", price: "8,000 KRW" 
+            },
+            { 
+                id: 12, 
+                title: "War Memorial", 
+                category: "history", 
+                imgID: "1599290076937-56747d7c04bb", 
+                desc: "Riesiges Museum mit echten Panzern und Flugzeugen im Außenbereich.", 
+                location: "Yongsan-gu", price: "Kostenlos" 
+            },
+            { 
+                id: 13, 
+                title: "Bukhansan", 
+                category: "nature", 
+                imgID: "1614611623607-92007503086c", 
+                desc: "Nationalpark direkt an der Stadtgrenze. Tolle Wanderwege.", 
+                location: "Dobong-gu", price: "Kostenlos" 
+            },
+            { 
+                id: 14, 
+                title: "Starfield Library", 
+                category: "art", 
+                imgID: "1580186124159-3614953c973d", 
+                desc: "Eine Bibliothek im Einkaufszentrum mit riesigen Bücherregalen.", 
+                location: "COEX Mall", price: "Kostenlos" 
+            }
         ];
 
-        /* LOGIK */
-        const grid = document.getElementById('cardGrid');
-        const filterBtns = document.querySelectorAll('.filter-btn');
+        // Header Hintergrundbild ID setzen
+        document.getElementById('heroBg').style.backgroundImage = `url('${unsplashBase}1517154421773-0529f29ea451${unsplashParams}')`;
 
-        // Init
+
+        /* =========================================
+           LOGIK
+           ========================================= */
+
+        // 1. COOKIE WALL LOGIC
+        function acceptAll() {
+            // Speichern, dass akzeptiert wurde
+            localStorage.setItem('cookiesAccepted', 'true');
+            // Wall ausblenden
+            document.getElementById('cookieWall').classList.add('hidden');
+        }
+
+        // Beim Laden prüfen
         window.addEventListener('load', () => {
-            setTimeout(() => { document.getElementById('loader').classList.add('loader-hidden'); }, 800);
+            // Ladebildschirm weg
+            setTimeout(() => { document.getElementById('loader').classList.add('loader-hidden'); }, 500);
+
+            // Prüfen ob schon akzeptiert wurde
+            if (localStorage.getItem('cookiesAccepted') === 'true') {
+                document.getElementById('cookieWall').classList.add('hidden');
+            }
+            
+            // Karten erstellen
             renderCards('all');
-            checkCookies(); // Cookie Banner Check
         });
 
-        // Cookie Logic
-        function checkCookies() {
-            if (!localStorage.getItem('cookiesAccepted')) {
-                setTimeout(() => { document.getElementById('cookieBanner').classList.add('show'); }, 2000);
-            }
-        }
-        function acceptCookies() {
-            localStorage.setItem('cookiesAccepted', 'true');
-            document.getElementById('cookieBanner').classList.remove('show');
-        }
+        // 2. KARTEN GENERIEREN (URL wird hier gebaut!)
+        const grid = document.getElementById('cardGrid');
 
-        // Render Cards
         function renderCards(filter) {
             grid.innerHTML = '';
-            const filteredData = filter === 'all' ? attractions : attractions.filter(item => item.category === filter);
-            filteredData.forEach((item, index) => {
+            
+            const filtered = filter === 'all' ? attractions : attractions.filter(x => x.category === filter);
+
+            filtered.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.style.animation = `fadeInUp 0.6s ease forwards ${index * 0.1}s`;
-                card.style.opacity = '0';
                 
-                // Backup Image Logic
-                const backupImage = `https://placehold.co/600x400/222/fff?text=${encodeURIComponent(item.title)}`;
-                
+                // Hier bauen wir den Link zusammen: Base + ID + Params
+                const fullImageUrl = unsplashBase + item.imgID + unsplashParams;
+
                 card.innerHTML = `
                     <div class="card-img-wrapper">
                         <div class="card-overlay">${item.category.toUpperCase()}</div>
-                        <img src="${item.image}" alt="${item.title}" class="card-img" loading="lazy" onerror="this.src='${backupImage}'">
+                        <img src="${fullImageUrl}" alt="${item.title}" class="card-img" loading="lazy">
                     </div>
                     <div class="card-content">
-                        <div><h3 class="card-title">${item.title}</h3><p class="card-preview">${item.desc}</p></div>
-                        <div class="card-footer"><span>📍 ${item.location}</span><span class="read-more">Mehr Infos →</span></div>
+                        <div>
+                            <h3 class="card-title">${item.title}</h3>
+                            <p class="card-preview">${item.desc}</p>
+                        </div>
+                        <div class="card-footer">
+                            <span>📍 ${item.location}</span>
+                            <span class="read-more">INFO →</span>
+                        </div>
                     </div>
                 `;
-                card.onclick = () => openAttractionModal(item);
+                
+                card.onclick = () => openModal(item, fullImageUrl);
                 grid.appendChild(card);
             });
         }
 
-        // Filters
-        filterBtns.forEach(btn => {
+        // 3. FILTER
+        const btns = document.querySelectorAll('.filter-btn');
+        btns.forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelector('.filter-btn.active').classList.remove('active');
                 btn.classList.add('active');
@@ -396,53 +514,35 @@
             });
         });
 
-        // Attraction Modal
-        function openAttractionModal(item) {
-            const m = document.getElementById('attractionModal');
-            document.getElementById('modalImg').style.backgroundImage = `url(${item.image})`;
+        // 4. MODAL
+        const modal = document.getElementById('attractionModal');
+        
+        function openModal(item, url) {
+            document.getElementById('modalImg').style.backgroundImage = `url('${url}')`;
             document.getElementById('modalTitle').innerText = item.title;
             document.getElementById('modalDesc').innerText = item.desc;
             document.getElementById('modalCat').innerText = item.category;
             document.getElementById('modalLoc').innerText = item.location;
             document.getElementById('modalPrice').innerText = item.price;
-            m.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            modal.classList.add('active');
         }
 
-        // Legal Modals (Impressum/Privacy)
-        const legalTexts = {
-            impressum: `<strong>Angaben gemäß § 5 TMG</strong><br><br>Kayden<br>Klasse 8C<br>Fach: Informatik<br>Schulprojekt<br><br><strong>Kontakt:</strong><br>E-Mail: kayden.schunack@gmail.com<br><br><strong>Haftungsausschluss:</strong><br>Dies ist ein reines Schülerprojekt. Alle Angaben sind ohne Gewähr.`,
-            privacy: `<strong>Datenschutzerklärung</strong><br><br><strong>1. Allgemeines</strong><br>Dies ist ein Schulprojekt. Wir sammeln keine personenbezogenen Daten. Es findet kein Tracking (Google Analytics o.ä.) statt.<br><br><strong>2. Hosting</strong><br>Diese Seite wird bei GitHub Pages gehostet. GitHub erfasst möglicherweise IP-Adressen in Logfiles aus technischen Gründen.<br><br><strong>3. Cookies</strong><br>Wir setzen keine funktionalen oder Tracking-Cookies. Der Cookie-Banner dient nur zu Demonstrationszwecken.`,
-            disclaimer: `<strong>Haftung für Inhalte</strong><br>Als Schülerprojekt sind wir bemüht, richtige Informationen bereitzustellen, übernehmen aber keine Haftung für die Richtigkeit der Reiseinformationen.<br><br><strong>Urheberrecht</strong><br>Die verwendeten Bilder stammen von Unsplash und sind lizenzfrei.`
-        };
-
-        function openLegalModal(type) {
-            const m = document.getElementById('legalModal');
-            document.getElementById('legalTitle').innerText = type === 'impressum' ? 'Impressum' : (type === 'privacy' ? 'Datenschutz' : 'Haftungsausschluss');
-            document.getElementById('legalText').innerHTML = legalTexts[type];
-            m.classList.add('active');
-            document.body.style.overflow = 'hidden';
+        function closeModal() {
+            modal.classList.remove('active');
         }
 
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Close on outside click
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal-overlay')) {
-                event.target.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        }
+        // Klick außerhalb schließt Modal
+        modal.addEventListener('click', (e) => {
+            if(e.target === modal) closeModal();
+        });
 
         // Scroll Navbar
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) nav.classList.add('scrolled');
+            if(window.scrollY > 50) nav.classList.add('scrolled');
             else nav.classList.remove('scrolled');
         });
+
     </script>
 </body>
 </html>
