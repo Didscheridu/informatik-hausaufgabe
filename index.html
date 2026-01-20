@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Der ultimative Reiseführer für Seoul, Südkorea. Entdecke Geschichte, Moderne und Kulinarik.">
-    <title>NEON SEOUL | The Ultimate Guide v3.1 (Legal Images)</title>
+    <title>NEON SEOUL | The Ultimate Guide v4.0 (Fixed Images)</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -190,12 +190,12 @@
         }
 
         /* Das Hintergrundbild mit Overlay */
-        /* NEUES LEGALES BILD (Unsplash License) */
         .hero-bg {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-image: url('https://images.unsplash.com/photo-1517154421773-0529f29ea451?q=80&w=1920');
+            /* Ein garantiertes Bild für den Header */
+            background-image: url('https://images.unsplash.com/photo-1538485399081-7191377e8241?q=80&w=1920');
             background-size: cover;
             background-position: center;
             z-index: -1;
@@ -338,6 +338,7 @@
             height: 250px;
             overflow: hidden;
             position: relative;
+            background-color: #222; /* Fallback Farbe */
         }
 
         .card-img {
@@ -457,6 +458,7 @@
             background-size: cover;
             background-position: center;
             position: relative;
+            background-color: #000;
         }
         
         /* Gradient über dem Modal-Bild */
@@ -709,7 +711,7 @@
         <div class="footer-content">
             <div class="footer-col">
                 <h3>Über das Projekt</h3>
-                <p>Diese Webseite wurde als Code-Review-Aufgabe für den Informatikunterricht erstellt. Sie demonstriert moderne Webtechnologien wie CSS Grid, Flexbox, Animations und JavaScript DOM Manipulation. Alle verwendeten Bilder sind lizenzfrei (Unsplash License).</p>
+                <p>Diese Webseite wurde als Code-Review-Aufgabe für den Informatikunterricht erstellt. Sie demonstriert moderne Webtechnologien wie CSS Grid, Flexbox, Animations und JavaScript DOM Manipulation.</p>
             </div>
             <div class="footer-col">
                 <h3>Wichtige Links</h3>
@@ -731,7 +733,7 @@
             </div>
         </div>
         <div class="copyright">
-            © 2026 Seoul Guide Project | Version 3.1 Ultimate (Legal Images)
+            © 2026 Seoul Guide Project | Version 4.0 Ultimate (Live Images)
         </div>
     </footer>
 
@@ -762,15 +764,14 @@
 
     <script>
         /* =========================================
-           DATENBANK (Array mit Objekten)
-           HIER SIND DIE NEUEN, LEGALEN BILDER!
+           DATENBANK MIT ONLINE BILDERN (UNSPLASH)
            ========================================= */
         const attractions = [
             {
                 id: 1,
                 title: "Gyeongbokgung Palast",
                 category: "history",
-                image: "https://images.unsplash.com/photo-1598602950504-4725a75c3421?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1546808619-535260c381d3?w=800",
                 desc: "Der größte und wichtigste der fünf Paläste. 1395 erbaut, dient er als Symbol der Joseon-Dynastie. Die Wachablösung ist weltberühmt. Wenn du traditionelle Kleidung (Hanbok) trägst, kommst du kostenlos rein!",
                 location: "Jongno-gu",
                 price: "3,000 KRW"
@@ -779,7 +780,7 @@
                 id: 2,
                 title: "N Seoul Tower",
                 category: "modern",
-                image: "https://images.unsplash.com/photo-1546808619-535260c381d3?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1535189043414-47a3c49a0bed?w=800",
                 desc: "Der ikonische Fernsehturm auf dem Namsan Berg. Er ist 236 Meter hoch und bietet den besten 360-Grad-Blick über die Stadt. Besonders romantisch bei Sonnenuntergang.",
                 location: "Namsan Park",
                 price: "16,000 KRW"
@@ -788,7 +789,7 @@
                 id: 3,
                 title: "Myeongdong Market",
                 category: "food",
-                image: "https://images.unsplash.com/photo-1536236155322-15e263091826?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1580651315530-69c8e0026377?w=800",
                 desc: "Ein Paradies für Foodies und Shopaholics. Hier gibt es das beste Street Food: Von Lobster-Schwänzen bis zu 30cm hohem Eis. Außerdem ist es das Zentrum für K-Beauty.",
                 location: "Jung-gu",
                 price: "Variabel"
@@ -797,7 +798,7 @@
                 id: 4,
                 title: "Bukchon Hanok Village",
                 category: "history",
-                image: "https://images.unsplash.com/photo-1610425851516-2818fa952608?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1583246830368-20412b509d6f?w=800",
                 desc: "Ein historisches Dorf mit hunderten traditionellen koreanischen Häusern (Hanok). Es liegt malerisch zwischen zwei Palästen und bietet tolle Fotospots.",
                 location: "Jongno-gu",
                 price: "Kostenlos"
@@ -806,7 +807,7 @@
                 id: 5,
                 title: "Lotte World Tower",
                 category: "modern",
-                image: "https://images.unsplash.com/photo-1604938507099-224114574637?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1596409893549-b39f1c30575d?w=800",
                 desc: "Mit 555 Metern das höchste Gebäude Koreas und das fünfthöchste der Welt. Die Aussichtsplattform 'Seoul Sky' hat einen Glasboden, auf dem man über dem Abgrund steht.",
                 location: "Songpa-gu",
                 price: "27,000 KRW"
@@ -815,7 +816,7 @@
                 id: 6,
                 title: "Dongdaemun Design Plaza",
                 category: "modern",
-                image: "https://images.unsplash.com/photo-1616166290792-da9194015392?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1617955069029-71c449eb083e?w=800",
                 desc: "Ein futuristisches Gebäude, entworfen von Zaha Hadid. Es sieht aus wie ein gelandetes Raumschiff. Nachts leuchtet es spektakulär und beherbergt Design-Ausstellungen.",
                 location: "Dongdaemun",
                 price: "Kostenlos"
@@ -824,7 +825,7 @@
                 id: 7,
                 title: "Insadong Street",
                 category: "art",
-                image: "https://images.unsplash.com/photo-1618831521065-6f6450756998?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1620633436577-3e817cf7b593?w=800",
                 desc: "Das kulturelle Herz der Stadt. Hier findest du Antiquitäten, Kunstgalerien, Pinsel, Papier und traditionelle Teehäuser in verwinkelten Gassen.",
                 location: "Insa-dong",
                 price: "Kostenlos"
@@ -833,7 +834,7 @@
                 id: 8,
                 title: "Hongdae",
                 category: "modern",
-                image: "https://images.unsplash.com/photo-1569171227039-299c13136731?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1535313986064-1628290f64c1?w=800",
                 desc: "Das Viertel der Jugend und Musik. Bekannt für Straßenmusiker (Busking), günstige Mode, Karaoke-Bars und ein pulsierendes Nachtleben rund um die Universität.",
                 location: "Mapo-gu",
                 price: "Kostenlos"
@@ -842,7 +843,7 @@
                 id: 9,
                 title: "Cheonggyecheon Stream",
                 category: "nature",
-                image: "https://images.unsplash.com/photo-1605017668474-e93042c12346?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1563286390-e3256e29705f?w=800",
                 desc: "Eine Oase der Ruhe. Dieser 11km lange Fluss fließt mitten durch das Stadtzentrum, tiefergelegt unter dem Straßenniveau. Perfekt für Spaziergänge.",
                 location: "Jongno-gu",
                 price: "Kostenlos"
@@ -851,7 +852,7 @@
                 id: 10,
                 title: "Gangnam District",
                 category: "modern",
-                image: "https://images.unsplash.com/photo-1617936827258-096320583608?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1520466809213-7b9a56adcd45?w=800",
                 desc: "Der wohlhabendste Bezirk ('Beverly Hills von Seoul'). Bekannt für K-Pop, Luxusshopping, plastische Chirurgie und die riesige COEX Mall.",
                 location: "Gangnam-gu",
                 price: "Teuer"
@@ -860,7 +861,7 @@
                 id: 11,
                 title: "Changdeokgung & Huwon",
                 category: "history",
-                image: "https://images.unsplash.com/photo-1570966164253-562513292796?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1590422501099-b1d5c7df768d?w=800",
                 desc: "UNESCO Weltkulturerbe. Besonders berühmt für den 'Geheimen Garten' (Huwon), der wunderschön in die natürliche Landschaft integriert wurde.",
                 location: "Jongno-gu",
                 price: "8,000 KRW"
@@ -869,7 +870,7 @@
                 id: 12,
                 title: "War Memorial of Korea",
                 category: "history",
-                image: "https://images.unsplash.com/photo-1614611623554-205310415158?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1599290076937-56747d7c04bb?w=800",
                 desc: "Ein riesiges Museum zur Militärgeschichte Koreas. Draußen sind echte Flugzeuge, Panzer und Schiffe ausgestellt, die man besichtigen kann.",
                 location: "Yongsan-gu",
                 price: "Kostenlos"
@@ -878,7 +879,7 @@
                 id: 13,
                 title: "Gwangjang Market",
                 category: "food",
-                image: "https://images.unsplash.com/photo-1556909835-69753963321f?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1629095745425-706388960090?w=800",
                 desc: "Einer der ältesten Märkte Koreas. Berühmt für Bindaetteok (Mungbohnenpfannkuchen) und rohes Rindfleisch (Yukhoe). Sehr authentisch!",
                 location: "Jongno-gu",
                 price: "Günstig"
@@ -887,7 +888,7 @@
                 id: 14,
                 title: "Ihwa Mural Village",
                 category: "art",
-                image: "https://images.unsplash.com/photo-1605619854663-060386153250?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1584803738090-4c3d3175024b?w=800",
                 desc: "Ein Dorf am Hang, das durch Kunst gerettet wurde. Überall an den Wänden und Treppen finden sich bunte Malereien und Skulpturen.",
                 location: "Ihwa-dong",
                 price: "Kostenlos"
@@ -896,7 +897,7 @@
                 id: 15,
                 title: "Bukhansan National Park",
                 category: "nature",
-                image: "https://images.unsplash.com/photo-1609943801209-846361626875?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1614611623607-92007503086c?w=800",
                 desc: "Wandern in der Großstadt? Ja! Dieser Nationalpark liegt direkt am Stadtrand und bietet steile Granitgipfel mit Wahnsinns-Aussicht.",
                 location: "Dobong-gu",
                 price: "Kostenlos"
@@ -905,7 +906,7 @@
                 id: 16,
                 title: "Starfield Library",
                 category: "art",
-                image: "https://images.unsplash.com/photo-1592052718886-72168076372e?w=800", /* NEU */
+                image: "https://images.unsplash.com/photo-1580186124159-3614953c973d?w=800",
                 desc: "Eine öffentliche Bibliothek mitten in einem Einkaufszentrum. Die 13 Meter hohen Bücherregale sind ein extrem beliebter Instagram-Spot.",
                 location: "COEX Mall",
                 price: "Kostenlos"
@@ -925,7 +926,7 @@
             const loader = document.getElementById('loader');
             setTimeout(() => {
                 loader.classList.add('loader-hidden');
-            }, 800); // Kurze Wartezeit für Effekt
+            }, 800);
 
             // Alle Karten anzeigen
             renderCards('all');
@@ -944,14 +945,16 @@
             filteredData.forEach((item, index) => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                // Animation Verzögerung für coolen "Nacheinander"-Effekt
                 card.style.animation = `fadeInUp 0.6s ease forwards ${index * 0.1}s`;
-                card.style.opacity = '0'; // Startet unsichtbar
+                card.style.opacity = '0';
+
+                // Backup Bild, falls Internet blockiert ist oder Link defekt
+                const backupImage = `https://placehold.co/600x400/222/fff?text=${encodeURIComponent(item.title)}`;
 
                 card.innerHTML = `
                     <div class="card-img-wrapper">
                         <div class="card-overlay">${item.category.toUpperCase()}</div>
-                        <img src="${item.image}" alt="${item.title}" class="card-img" loading="lazy">
+                        <img src="${item.image}" alt="${item.title}" class="card-img" loading="lazy" onerror="this.src='${backupImage}'">
                     </div>
                     <div class="card-content">
                         <div>
@@ -965,7 +968,6 @@
                     </div>
                 `;
                 
-                // Klick Event für Modal
                 card.onclick = () => openModal(item);
                 
                 grid.appendChild(card);
@@ -975,11 +977,8 @@
         // 3. Filter Buttons Event Listener
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                // Active Klasse verschieben
                 document.querySelector('.filter-btn.active').classList.remove('active');
                 btn.classList.add('active');
-                
-                // Filtern
                 renderCards(btn.dataset.filter);
             });
         });
@@ -1002,44 +1001,34 @@
             modalPrice.innerText = item.price;
             
             modal.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Scrollen im Hintergrund verhindern
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeModal() {
             modal.classList.remove('active');
-            document.body.style.overflow = 'auto'; // Scrollen wieder erlauben
+            document.body.style.overflow = 'auto'; 
         }
 
-        // Modal schließen wenn man daneben klickt
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 closeModal();
             }
         });
 
-        // 5. Scroll Events (Navbar & BackToTop)
+        // 5. Scroll Events
         const navbar = document.getElementById('navbar');
         const backToTopBtn = document.getElementById('backToTop');
 
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
 
-            if (window.scrollY > 500) {
-                backToTopBtn.classList.add('show');
-            } else {
-                backToTopBtn.classList.remove('show');
-            }
+            if (window.scrollY > 500) backToTopBtn.classList.add('show');
+            else backToTopBtn.classList.remove('show');
         });
 
         function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
